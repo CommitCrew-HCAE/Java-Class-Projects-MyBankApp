@@ -1,49 +1,61 @@
 package com.example.demo.model;
 
-import java.math.BigDecimal;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class Account {
 
+    @Id
     private String accountNumber;
-    private String ownerName;
-    private BigDecimal balance;
-    private AccountType accountType;
-    private AccountStatus status;
 
-    public Account(String accountNumber, String ownerName, BigDecimal balance,
-                   AccountType accountType, AccountStatus status) {
-        this.accountNumber = accountNumber;
-        this.ownerName = ownerName;
-        this.balance = balance;
-        this.accountType = accountType;
-        this.status = status;
+    private String ownerName;
+    private double balance;
+    private String accountType;
+    private String status;
+
+    public Account() {
     }
+
+    // Getters and Setters
 
     public String getAccountNumber() {
         return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public String getOwnerName() {
         return ownerName;
     }
 
-    public BigDecimal getBalance() {
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public double getBalance() {
         return balance;
     }
 
-    public AccountType getAccountType() {
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public String getAccountType() {
         return accountType;
     }
 
-    public AccountStatus getStatus() {
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void deposit(BigDecimal amount) {
-        this.balance = this.balance.add(amount);
-    }
-
-    public void withdraw(BigDecimal amount) {
-        this.balance = this.balance.subtract(amount);
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

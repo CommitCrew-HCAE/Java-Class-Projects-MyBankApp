@@ -1,11 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Account;
-import com.example.demo.model.AccountType;
 import com.example.demo.service.AccountService;
-
-import java.math.BigDecimal;
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,36 +14,38 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    // Create account
     @PostMapping
     public Account createAccount(
             @RequestParam String ownerName,
-            @RequestParam AccountType accountType
+            @RequestParam String accountType
     ) {
         return accountService.createAccount(ownerName, accountType);
     }
 
+    // Get account by account number
     @GetMapping("/{accountNumber}")
     public Account getAccount(@PathVariable String accountNumber) {
-        return accountService.getAccountByNumber(accountNumber);
+        return accountService.getAccount(accountNumber);
     }
 
+    // Deposit
     @PostMapping("/{accountNumber}/deposit")
-public String deposit(
-        @PathVariable String accountNumber,
-        @RequestParam BigDecimal amount
-) {
-    boolean success = accountService.deposit(accountNumber, amount);
-    return success ? "Deposit successful" : "Deposit failed";
-}
+    public String deposit(
+            @PathVariable String accountNumber,
+            @RequestParam double amount
+    ) {
+        accountService.deposit(accountNumber, amount);
+        return "Deposit successful";
+    }
 
-@PostMapping("/{accountNumber}/withdraw")
-public String withdraw(
-        @PathVariable String accountNumber,
-        @RequestParam BigDecimal amount
-) {
-    boolean success = accountService.withdraw(accountNumber, amount);
-    return success ? "Withdrawal successful" : "Withdrawal failed";
-}
-
-
+    // Withdraw
+    @PostMapping("/{accountNumber}/withdraw")
+    public String withdraw(
+            @PathVariable String accountNumber,
+            @RequestParam double amount
+    ) {
+        accountService.withdraw(accountNumber, amount);
+        return "Withdrawal successful";
+    }
 }

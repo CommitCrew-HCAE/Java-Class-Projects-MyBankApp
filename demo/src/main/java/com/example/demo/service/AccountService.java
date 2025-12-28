@@ -1,59 +1,53 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Account;
-import com.example.demo.model.AccountStatus;
-import com.example.demo.model.AccountType;
+import com.example.demo.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class AccountService {
 
-    // Temporary in-memory storage (will be replaced by DB later)
-    private final Map<String, Account> accounts = new HashMap<>();
+    private final AccountRepository accountRepository;
 
-    public Account createAccount(String ownerName, AccountType accountType) {
-        String accountNumber = UUID.randomUUID().toString();
-
-        Account account = new Account(
-                accountNumber,
-                ownerName,
-                BigDecimal.ZERO,
-                accountType,
-                AccountStatus.ACTIVE
-        );
-
-        accounts.put(accountNumber, account);
-        return account;
+    public AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
     }
 
-    public Account getAccountByNumber(String accountNumber) {
-        return accounts.get(accountNumber);
+    public Account createAccount(String ownerName, String accountType) {
+        Account account = new Account();
+        account.setAccountNumber(UUID.randomUUID().toString());
+        account.setOwnerName(ownerName);
+        account.setAccountType(accountType);
+        account.setBalance(0);
+        account.setStatus("ACTIVE");
+
+        return accountRepository.save(account);
     }
 
-    public boolean deposit(String accountNumber, BigDecimal amount) {
-    Account account = accounts.get(accountNumber);
-    if (account == null || account.getStatus() != AccountStatus.ACTIVE) {
-        return false;
-    }
-    account.deposit(amount);
-    return true;
-}
+    public Account deposit(String accountNumber, double amount) {
+        Account account = accountRepository.findById(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
-public boolean withdraw(String accountNumber, BigDecimal amount) {
-    Account account = accounts.get(accountNumber);
-    if (account == null || account.getStatus() != AccountStatus.ACTIVE) {
-        return false;
+        account.setBalance(account.getBalance() + amount);
+        return accountRepository.save(account);
     }
-    if (account.getBalance().compareTo(amount) < 0) {
-        return false; // Not enough balance
-    }
-    account.withdraw(amount);
-    return true;
-}
 
+    public Account withdraw(String accountNumber, double amount) {
+        Account account = accountRepository.findById(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        if (account.getBalance() < amount) {
+            throw new RuntimeException("Insufficient balance");
+        }
+
+        account.setBalance(account.getBalance() - amount);
+        return accountRepository.save(account);
+    }
+
+    public Account getAccount(String accountNumber) {
+        return accountRepository.findById(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+    }
 }
