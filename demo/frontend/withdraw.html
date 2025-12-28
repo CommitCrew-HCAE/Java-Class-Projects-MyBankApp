@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Withdraw</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+<header>Simple Banking System</header>
+
+<div class="container">
+    <nav>
+        <a href="index.html">Create Account</a>
+        <a href="deposit.html">Deposit</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="account.html">View Account</a>
+    </nav>
+
+    <h2>Withdraw Money</h2>
+    <input type="text" id="withdrawAccountNumber" placeholder="Account Number" value="">
+    <input type="number" id="withdrawAmount" placeholder="Amount">
+    <button onclick="withdraw()">Withdraw</button>
+    <p id="withdrawResult"></p>
+</div>
+
+<script>
+document.getElementById("withdrawAccountNumber").value = localStorage.getItem("lastAccountNumber") || "";
+
+async function withdraw() {
+    const accountNumber = document.getElementById("withdrawAccountNumber").value;
+    const amount = document.getElementById("withdrawAmount").value;
+    if (!accountNumber || !amount) {
+        alert("Please provide account number and amount!");
+        return;
+    }
+    const text = await withdrawJS(accountNumber, amount);
+    document.getElementById("withdrawResult").innerText = text;
+}
+</script>
+</body>
+</html>
