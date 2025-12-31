@@ -40,4 +40,22 @@ public class PageController {
         model.addAttribute("account", account);
         return "account";
     }
+
+    // Deposit page
+    @GetMapping("/deposit")
+    public String depositPage() {
+        return "deposit";
+    }
+
+    @PostMapping("/deposit")
+    public String deposit(
+            @RequestParam String accountNumber,
+            @RequestParam double amount,
+            Model model
+    ) {
+        accountService.deposit(accountNumber, amount);
+        Account account = accountService.getAccount(accountNumber);
+        model.addAttribute("account", account);
+        return "account";
+    }
 }
