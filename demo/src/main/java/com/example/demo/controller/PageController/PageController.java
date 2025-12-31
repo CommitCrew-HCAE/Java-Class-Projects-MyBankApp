@@ -58,4 +58,22 @@ public class PageController {
         model.addAttribute("account", account);
         return "account";
     }
+
+    // Withdraw page
+    @GetMapping("/withdraw")
+    public String withdrawPage() {
+        return "withdraw";
+    }
+
+    @PostMapping("/withdraw")
+    public String withdraw(
+            @RequestParam String accountNumber,
+            @RequestParam double amount,
+            Model model
+    ) {
+        accountService.withdraw(accountNumber, amount);
+        Account account = accountService.getAccount(accountNumber);
+        model.addAttribute("account", account);
+        return "account";
+    }
 }
