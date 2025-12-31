@@ -46,6 +46,6 @@ public class AccountController {
             @RequestParam double amount
     ) {
         accountService.withdraw(accountNumber, amount);
-        return "Withdrawal successful";
+        return "Withdrawal successfull";
     }
 }
