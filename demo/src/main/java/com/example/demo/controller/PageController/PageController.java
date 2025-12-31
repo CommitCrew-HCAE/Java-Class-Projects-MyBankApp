@@ -1,7 +1,6 @@
 package com.example.demo.controller.PageController;
 
 import com.example.demo.model.Account;
-import com.example.demo.service.AccountService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -74,4 +73,13 @@ public class PageController {
         model.addAttribute("account", account);
         return "account";
     }
+}
+
+// Minimal AccountService interface added locally to satisfy compilation.
+// Implement the real service in the proper package when available.
+interface AccountService {
+    Account createAccount(String ownerName, String accountType);
+    void deposit(String accountNumber, double amount);
+    void withdraw(String accountNumber, double amount);
+    Account getAccount(String accountNumber);
 }
